@@ -13,11 +13,18 @@
   "license": "ISC",
   "dependencies": {
     "3": "^2.1.0",
-    "discord.js": "^14.14.1",
+    "@discordjs/rest": "^2.4.0",
+    "@discordjs/voice": "^0.18.0",
+    "@distube/spotify": "^2.0.2",
+    "@distube/yt-dlp": "^2.0.1",
+    "@distube/ytdl-core": "^4.15.1",
+    "discord-api-types": "^0.37.111",
+    "discord.js": "^14.16.3",
+    "distube": "^5.0.4",
+    "erela.js": "^2.4.0",
+    "mongoose": "^8.8.4",
     "node.js": "^0.0.1-security",
     "nodemon": "^3.1.0",
-    "sequelize": "^6.37.1",
-    "sqlite": "^5.1.1",
-    "sqlite3": "^5.1.7"
+    "ytdl-core": "^4.11.5"
   }
 }

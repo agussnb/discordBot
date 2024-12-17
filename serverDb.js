@@ -1,56 +1,32 @@
-const { Sequelize, QueryTypes } = require('sequelize');
+// serverDb.js
+const mongoose = require('mongoose');
 
-// Crear instancia de Sequelize y conectar a la base de datos
-const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: 'C:/Sqlite/discord_bot_db.db',
-    logging: false,
-});
-
-
-// Definir modelo para la tabla Members
-const Member = sequelize.define('Member', {
+const memberSchema = new mongoose.Schema({
     discordId: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true
+        type: String,
+        required: true,
+        unique: true,
     },
     username: {
-        type: Sequelize.STRING,
-        allowNull: false
+        type: String,
+        required: true,
     },
     experience: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0
+        type: Number,
+        default: 0,
     },
     level: {
-        type: Sequelize.INTEGER,
-        defaultValue: 1
-    }
+        type: Number,
+        default: 1,
+    },
+    money: {
+        type: Number,
+        default: 0,
+    },
 });
 
+// Definimos el modelo de Mongoose, asegurándonos de que se use correctamente si ya está definido
+const Member = mongoose.models.Member || mongoose.model('Member', memberSchema);
 
-// Función para insertar un nuevo miembro en la base de datos
-async function insertMember(discordId) {
-    try {
-        await Member.create({ discordId });
-        console.log('Miembro insertado correctamente en la tabla.');
-    } catch (error) {
-        console.error('Error al insertar miembro en la tabla:', error);
-    }
-}
-
-async function syncDatabase() {
-    try {
-        await sequelize.sync({ alter: true }); 
-        console.log('Base de datos sincronizada correctamente.');
-    } catch (error) {
-        console.error('Error al sincronizar la base de datos:', error);
-    }
-}
-
-module.exports = {
-    sequelize,
-    Member,
-    syncDatabase
-};
+// Exportamos solo el modelo Member
+module.exports = Member;

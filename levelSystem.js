@@ -1,10 +1,10 @@
-const { Member } = require('./serverDb');
 const { EventEmitter } = require('events');
 const levelUpEvent = new EventEmitter();
+const Member = require('./serverDb.js');
 
 async function giveExperience(discordId, amount) {
     try {
-        const member = await Member.findOne({ where: { discordId } });
+        const member = await Member.findOne({ discordId }); // Usamos findOne sin 'where'
         if (member) {
             member.experience += amount;
             await member.save();
@@ -20,22 +20,19 @@ async function giveExperience(discordId, amount) {
 
 async function checkLevelUp(userId) {
     try {
-        const member = await Member.findOne({ where: { discordId: userId } });
+        const member = await Member.findOne({ discordId: userId }); // Usamos findOne sin 'where'
         if (!member) {
             console.error(`No se encontró al usuario con ID ${userId}.`);
             return;
         }
 
-        const experienceNeeded = 100 + (member.level - 1) * 30; // Cantidad necesaria para subir de nivel
+        const experienceNeeded = 100 + (member.level - 1) * 30; // Calcula la experiencia necesaria para subir de nivel
         if (member.experience >= experienceNeeded) {
             member.level++;
-            member.experience -= experienceNeeded; // Restar la experiencia necesaria para subir de nivel
-            console.log(`¡${member.discordId} subió de nivel! Ahora es nivel ${member.level}.`);
+            member.experience -= experienceNeeded; // Restamos la experiencia necesaria para subir
+            console.log(`¡${member.username} subió de nivel! Ahora es nivel ${member.level}.`);
             await member.save(); // Guarda los cambios en la base de datos
             levelUpEvent.emit('levelUp', member); // Emite el evento de subida de nivel
-        }
-        else{
-            console.log('El usuario no sube de nivel')
         }
     } catch (error) {
         console.error('Error al verificar la subida de nivel:', error);
@@ -44,22 +41,20 @@ async function checkLevelUp(userId) {
 
 async function userLevel(userId) {
     try {
-        const member = await Member.findOne({ where: { discordId: userId } });
+        const member = await Member.findOne({ discordId: userId }); // Usamos findOne sin 'where'
         if (!member) {
             console.error(`No se encontró al usuario con ID ${userId}.`);
             return null;
         }
-        return { level: member.level, experience: member.experience };
+        const expToLvlUp = 100 + (member.level - 1) * 30; // Calcula la experiencia necesaria para subir al siguiente nivel
+        return { level: member.level, experience: member.experience, expToNextLvl: expToLvlUp };
     } catch (error) {
-        console.error('Error al verificar la informacion del usuario:', error);
+        console.error('Error al verificar la información del usuario:', error);
         return null;
     }
 }
 
-
-
-// Otros métodos relacionados con el sistema de niveles y experiencia
-
+// Exportamos las funciones necesarias
 module.exports = {
     giveExperience,
     checkLevelUp,

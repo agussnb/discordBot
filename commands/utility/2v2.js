@@ -20,26 +20,17 @@ module.exports = {
         const nombreParticipanteTres = participanteTres ? `<@${participanteTres.id}>` : 'Participante 3';
         const nombreParticipanteCuatro = participanteCuatro ? `<@${participanteCuatro.id}>` : 'Participante 4';
 
+        // Crear lista con los participantes
         const participantes = [nombreParticipanteUno, nombreParticipanteDos, nombreParticipanteTres, nombreParticipanteCuatro];
-        let participanteUnoEquipoUno, participanteDosEquipoUno, participanteUnoEquipoDos, participanteDosEquipoDos;
 
-        // Validar para el equipo 1
-        do {
-            participanteUnoEquipoUno = participantes[Math.floor(Math.random() * participantes.length)];
-            participanteDosEquipoUno = participantes[Math.floor(Math.random() * participantes.length)];
-        } while (participanteUnoEquipoUno === participanteDosEquipoUno);
-    
-        // Validar para el equipo 2
-        do {
-            participanteUnoEquipoDos = participantes[Math.floor(Math.random() * participantes.length)];
-            participanteDosEquipoDos = participantes[Math.floor(Math.random() * participantes.length)];
-        } while (
-            participanteUnoEquipoDos === participanteUnoEquipoUno ||
-            participanteUnoEquipoDos === participanteDosEquipoUno ||
-            participanteDosEquipoDos === participanteUnoEquipoUno ||
-            participanteDosEquipoDos === participanteDosEquipoUno
-        );
-        
-        await interaction.reply(`Equipo 1: ${participanteUnoEquipoUno} y ${participanteDosEquipoUno}\nEquipo 2: ${participanteUnoEquipoDos} y ${participanteDosEquipoDos}`);
+        // Barajar los participantes de forma aleatoria
+        const shuffledParticipants = participantes.sort(() => Math.random() - 0.5);
+
+        // Asignar los jugadores a los equipos
+        const equipoUno = [shuffledParticipants[0], shuffledParticipants[1]];
+        const equipoDos = [shuffledParticipants[2], shuffledParticipants[3]];
+
+        // Responder con la asignación de equipos
+        await interaction.reply(`Equipo 1: ${equipoUno[0]} y ${equipoUno[1]}\nEquipo 2: ${equipoDos[0]} y ${equipoDos[1]}`);
     },
 };

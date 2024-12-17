@@ -3,7 +3,7 @@ const { SlashCommandBuilder } = require('discord.js');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('3v3')
-        .setDescription('Responde armando un team para 2v2')
+        .setDescription('Responde armando un team para 3v3')
         .addUserOption(option => option.setName('participante-uno').setDescription('Primer participante'))
         .addUserOption(option => option.setName('participante-dos').setDescription('Segundo participante'))
         .addUserOption(option => option.setName('participante-tres').setDescription('Tercer participante'))
